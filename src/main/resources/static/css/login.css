@@ -1,0 +1,96 @@
+html, body {
+    background-color: rgba(239, 245, 250);
+    font-family: Calibri, Helvetica, sans-serif;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form {
+    background-color: rgba(125, 173, 216);
+    padding: 40px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 30px;
+    color: white;
+}
+
+.container {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.border-double {
+    border-style: double;
+    padding: 30px;
+}
+
+.label, .input {
+    width: 200px;
+    margin: 5px;
+}
+
+.label {
+    color: white;
+}
+
+.button {
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    background-color: #777;
+    color: white;
+}
+
+.button:hover {
+    background-color: #ccc;
+}
+
+.button:active {
+    border: 2px solid white;
+    background-color: #ccc;
+}
+
+.error {
+    color: red;
+}
+
+.success {
+    color: green;
+}
+
+a:link {
+    text-decoration: none;
+    color: blue;
+a {
+    margin: 5px;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+    color: purple;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: white;
+}
+
+a:active {
+    text-decoration: underline;
+    color: blue;
+}
+
+.regulation {
+    padding: 15px 0 0 0;
+}

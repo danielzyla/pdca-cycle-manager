@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <title>CYKL</title>
+    <!--/*/ <th:block th:include="fragments/general.html :: headerData" /> /*/-->
+</head>
+<body>
+<header><!--/*/ <th:block th:include="index.html :: header" /> /*/--></header>
+<nav><!--/*/ <th:block th:include="index.html :: nav" /> /*/--></nav>
+<section>
+    <aside>
+        <ul class="nav-list">
+            <li th:text="${current.project.projectName}">...</li>
+            <li>
+                <ul th:each="c, iStat : ${#lists.sort(current.project.cycles, cyclesByNameAsc)}">
+                    <li><a th:text="${c.cycleName}" th:href="@{'/cycles/showCycle/' + ${c.id}}">...</a><br>
+                        <a th:if="${iStat.index == (#lists.size(#lists.sort(current.project.cycles, cyclesByNameAsc)) - 1) and c.complete and c.nextCycle}"
+                           th:href="@{'/cycles/addCycle/' + ${current.project.id}}">+</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+    <article>
+        <div id="c1" class="container">
+            <h1>[[${#strings.toUpperCase(current.cycleName)}]] ([[${#strings.toUpperCase(current.project)}]])</h1>
+            <h2>
+                START: [[${#temporals.format(current.startTime, 'dd/MMM/yyyy HH:mm')}]]<br>
+                KONIEC: [[${#temporals.format(current.endTime, 'dd/MMM/yyyy HH:mm')}]]
+            </h2>
+            <h3 class="phase-plan-bg-color"><b>PLAN</b></h3>
+            <fieldset class="phase phase-plan-border-color">
+                <a th:if="${not current.planPhase.complete}"
+                   th:href="@{'/cycles/editPlan/'+${current.id}}">edytuj</a>
+
+                <form action="#" method="get" th:object="${current}">
+                    <div class="form-group">
+                        <label>CZAS ROZPOCZĘCIA:</label>
+                        <span th:text="*{#temporals.format(planPhase.startTime, 'dd/MMM/yyyy HH:mm')}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="problem">PROBLEM:</label><br>
+                        <textarea id="problem" rows="4" cols="120"
+                                  th:field="*{planPhase.problemDescription}" disabled></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>ZESPÓŁ PROJEKTOWY:</label><br>
+                        <ul th:each="teamMember : *{planPhase.employees}">
+                            <li th:text="${teamMember}">...</li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <label for="currentSituation">ANALIZA OBECNEJ SYTUACJI:</label><br>
+                        <textarea id="currentSituation" rows="6" cols="120"
+                                  th:field="*{planPhase.currentSituationAnalysis}" disabled></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="goal">CEL:</label><br>
+                        <textarea id="goal" rows="4" cols="120"
+                                  th:field="*{planPhase.goal}" disabled></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="rootCause">IDENTYFIKACJA PRZYCZYN PROBLEMU:</label><br>
+                        <textarea id="rootCause" rows="8" cols="120"
+                                  th:field="*{planPhase.rootCauseIdentification}" disabled></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="optimalSolution">WYBÓR OPTYMALNEGO ROZWIĄZANIA:</label><br>
+                        <textarea id="optimalSolution" rows="8" cols="120"
+                                  th:field="*{planPhase.optimalSolutionChoice}" disabled></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>STATUS:</label>
+                        <input type="checkbox" th:checked="*{planPhase.complete}" disabled/>
+                    </div>
+                    <div class="form-group">
+                        <label>CZAS ZAKOŃCZENIA:</label>
+                        <span th:text="*{#temporals.format(planPhase.endTime, 'dd/MMM/yyyy HH:mm')}"></span>
+                    </div>
+                </form>
+            </fieldset>
+            <br><br>
+            <h3 class="phase-do-bg-color"><b>DO</b></h3>
+            <fieldset class="phase phase-do-border-color" th:if="${current.planPhase.complete}">
+                <a th:if="${not current.doPhase.complete}"
+                   th:href="@{'/cycles/editDoPhase/'+${current.id}}">edytuj</a>
+                <form action="#" method="get" th:object="${current}">
+                    <div class="form-group">
+                        <label>CZAS ROZPOCZĘCIA:</label>
+                        <span th:text="*{#temporals.format(doPhase.startTime, 'dd/MMM/yyyy HH:mm')}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">OPIS PRZYGOTOWANIA I WDROŻENIA ROZWIĄZANIA:</label><br>
+                        <textarea id="description" rows="4" cols="120"
+                                  th:field="*{doPhase.description}" disabled></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>STATUS:</label>
+                        <input type="checkbox" th:checked="*{doPhase.complete}" disabled/>
+                    </div>
+                    <div class="form-group">
+                        <label>CZAS ZAKONCZENIA:</label>
+                        <span th:text="*{#temporals.format(doPhase.endTime, 'dd/MMM/yyyy HH:mm')}"></span>
+                    </div>
+                    <br><br>
+                </form>
+                <form action="#" method="get" th:object="${tasksToShow}">
+                    <fieldset class="tasks">ZADANIA:
+                        <table class="table table-hover table-light">
+                            <thead>
+                            <tr>
+                                <th>Data utworzenia</th>
+                                <th>Opis zadania</th>
+                                <th>Osoby wyznaczone</th>
+                                <th>Termin</th>
+                                <th>Status</th>
+                                <th>Zakończony</th>
+                                <th>Data wykonania</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="task : ${#lists.sort(tasksToShow, tasksByStartTime)}">
+                                <td th:text="${#temporals.format(task.startTime, 'dd/MMM/yyyy HH:mm')}"></td>
+                                <td th:text="${task.description}"></td>
+                                <td>
+                                    <ul class="inTableList" th:each="e : ${task.employees}">
+                                        <li th:text="${e}">...</li>
+                                    </ul>
+                                </td>
+                                <td th:text="${#temporals.format(task.deadline, 'dd-MM-yyyy')}"></td>
+                                <td th:text="${task.taskStatus}"></td>
+                                <td><input type="checkbox" th:checked="${task.complete}" disabled/></td>
+                                <td th:text="${#temporals.format(task.executionTime, 'dd/MMM/yyyy HH:mm')}"></td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                </form>
+            </fieldset>
+            <br><br>
+            <h3 class="phase-check-bg-color"><b>CHECK</b></h3>
+            <fieldset class="phase phase-check-border-color" th:if="${current.doPhase.complete}">
+                <a th:if="${not current.checkPhase.complete}"
+                   th:href="@{'/cycles/editCheckPhase/'+${current.id}}">edytuj</a>
+
+                <form action="#" method="get" th:object="${current}">
+                    <div class="form-group">
+                        <label>CZAS ROZPOCZĘCIA:</label>
+                        <span th:text="*{#temporals.format(checkPhase.startTime, 'dd/MMM/yyyy HH:mm')}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="conclusions">WYNIKI PRÓB I WNIOSKI:</label><br>
+                        <textarea id="conclusions" rows="4" cols="120"
+                                  th:field="*{checkPhase.conclusions}" disabled></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="achievements">KONTROLA CELU, EFEKT FINANSOWY, SKUTKI:</label><br>
+                        <textarea id="achievements" rows="6" cols="120"
+                                  th:field="*{checkPhase.achievements}" disabled></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="nextSteps">OBSZARY DO DALSZEJ POPRAWY:</label><br>
+                        <textarea id="nextSteps" rows="8" cols="120"
+                                  th:field="*{checkPhase.nextSteps}" disabled></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>STATUS:</label>
+                        <input type="checkbox" th:checked="*{checkPhase.complete}" disabled/>
+                    </div>
+                    <div class="form-group">
+                        <label>CZAS ZAKONCZENIA:</label>
+                        <span th:text="*{#temporals.format(checkPhase.endTime, 'dd/MMM/yyyy HH:mm')}"></span>
+                    </div>
+                </form>
+            </fieldset>
+            <br><br>
+            <h3 class="phase-act-bg-color"><b>ACT</b></h3>
+            <fieldset class="phase phase-act-border-color" th:if="${current.checkPhase.complete}">
+                <a th:if="${not current.actPhase.complete}"
+                   th:href="@{'/cycles/editActPhase/'+${current.id}}">edytuj</a>
+
+                <form action="#" method="get" th:object="${current}">
+                    <div class="form-group">
+                        <label>CZAS ROZPOCZĘCIA:</label>
+                        <span th:text="*{#temporals.format(actPhase.startTime, 'dd/MMM/yyyy HH:mm')}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="impl_description">OCENA MOŻLIWOSCI WDROŻENIA ZMIAN:</label><br>
+                        <textarea id="impl_description" rows="4" cols="120"
+                                  th:field="*{actPhase.description}" disabled></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>STATUS:</label>
+                        <input type="checkbox" th:checked="*{actPhase.complete}" disabled/>
+                    </div>
+                    <div class="form-group">
+                        <label>CZAS ZAKONCZENIA:</label>
+                        <span th:text="*{#temporals.format(actPhase.endTime, 'dd/MMM/yyyy HH:mm')}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>NASTĘPNY CYKL:</label>
+                        <input type="checkbox" th:checked="*{actPhase.nextCycle}" disabled/>
+                    </div>
+                    <br><br>
+                </form>
+                <form class="tasks" action="#" method="get" th:object="${actPhaseTasksToShow}">
+                    <fieldset>ZADANIA:
+                        <table class="table table-hover table-light">
+                            <thead>
+                            <tr>
+                                <th>Data utworzenia</th>
+                                <th>Opis zadania</th>
+                                <th>Osoby wyznaczone</th>
+                                <th>Termin</th>
+                                <th>Status</th>
+                                <th>Zakończony</th>
+                                <th>Data wykonania</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="task : ${#lists.sort(actPhaseTasksToShow, actPhaseTasksByStartTime)}">
+                                <td th:text="${#temporals.format(task.startTime, 'dd/MMM/yyyy HH:mm')}"></td>
+                                <td th:text="${task.description}"></td>
+                                <td>
+                                    <ul class="inTableList" th:each="e : ${task.employees}">
+                                        <li th:text="${e}">...</li>
+                                    </ul>
+                                </td>
+                                <td th:text="${#temporals.format(task.deadline, 'dd-MM-yyyy')}"></td>
+                                <td th:text="${task.taskStatus}"></td>
+                                <td><input type="checkbox" th:checked="${task.complete}" disabled/></td>
+                                <td th:text="${#temporals.format(task.executionTime, 'dd/MMM/yyyy HH:mm')}"></td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                </form>
+            </fieldset>
+        </div>
+    </article>
+</section>
+<footer><!--/*/ <th:block th:include="fragments/general.html :: footer" /> /*/--></footer>
+</body>
+</html>

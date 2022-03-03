@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>PRODUKTY</title>
+    <!--/*/ <th:block th:include="fragments/general.html :: headerData" /> /*/-->
+</head>
+<body>
+    <header><!--/*/ <th:block th:include="index.html :: header" /> /*/--></header>
+    <nav><!--/*/ <th:block th:include="index.html :: nav" /> /*/--></nav>
+    <section>
+        <aside>
+            <fieldset class="border">
+                <form th:if="${info == null}" action="#" th:action="@{/products}" method="post">
+                    <button type="submit" class="btn btn-primary" name="addProduct">Dodaj produkt</button>
+                </form>
+                <div th:if="${info != null}">
+                    <form action="#" th:action="@{/products}" method="post" th:object="${product}">
+                        <div class="form-group">
+                            <label class="field-name" for="productName">Nazwa produktu:</label>
+                            <input type="text" id="productName" class="form-control" placeholder="wpisz nazwę produktu"
+                                   name="productName" th:field="*{productName}">
+                            <p class="error" th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></p>
+                        </div>
+                        <div class="form-group">
+                            <label class="field-name" for="productCode">Kod produktu:</label>
+                            <input type="text" id="productCode" class="form-control" placeholder="wpisz kod produktu"
+                                   name="productCode" th:field="*{productCode}">
+                            <p class="error" th:if="${#fields.hasErrors('productCode')}" th:errors="*{productCode}"></p>
+                        </div>
+                        <div class="form-group">
+                            <label class="field-name" for="serialNo">Numer serii:</label>
+                            <input type="text" id="serialNo" class="form-control" placeholder="wpisz numer serii"
+                                   name="serialNo" th:field="*{serialNo}">
+                            <p class="error" th:if="${#fields.hasErrors('serialNo')}" th:errors="*{serialNo}"></p>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                        <button type="reset" value="Reset">Reset</button>
+                    </form>
+                </div>
+            </fieldset>
+        </aside>
+        <article>
+            <div id="c1" class="container">
+                <h2>Lista produktów:</h2>
+                <form action="#" th:action="@{/products}" method="get">
+                    <div class="form-group">
+                        <input type="text" class="form-control" th:name="productNamePhrase" placeholder="zawiera w nazwie ...">
+                        <button type="submit" class="btn btn-primary" name="search">szukaj</button>
+                    </div>
+                </form>
+                <div th:if="${not #lists.isEmpty(foundProducts)}">
+                    <table class="table table-hover table-light">
+                        <thead>
+                            <tr>
+                                <th>Nazwa</th>
+                                <th>Kod</th>
+                                <th>Nr serii</th>
+                                <th>Projekty</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="p : ${foundProducts}">
+                                <td th:text="${p.productName}"></td>
+                                <td th:text="${p.productCode}"></td>
+                                <td th:text="${p.serialNo}"></td>
+                                <td>
+                                    <ul class="inTableList" th:each="project : ${p.projects}">
+                                        <li th:text="${project}">...</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/products/editProduct/'+${p.id}}">
+                                        <!--/*/ <th:block th:include="fragments/general.html :: edit-icon" /> /*/-->
+                                    </a>
+                                </td>
+                                <td>
+                                    <a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/products/'+${p.id}}">
+                                        <!--/*/ <th:block th:include="fragments/general.html :: delete-icon" /> /*/-->
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="pagination" th:if="${pageNumbers > 0}">
+                        <span>
+                            <a href="#">&laquo;</a>
+                        </span>
+                        <span  th:each="pageNumber : ${#numbers.sequence(0, pageNumbers - 1)}">
+                            <a th:text="${pageNumber + 1}"
+                               th:href="@{/products(productNamePhrase=${givenPhrase},
+                               currentPage=${pageNumber})}">...</a>&nbsp;
+                        </span>
+                        <span>
+                            <a href="#">&raquo;</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+    <footer><!--/*/ <th:block th:include="fragments/general.html :: footer" /> /*/--></footer>
+</body>
+</html>

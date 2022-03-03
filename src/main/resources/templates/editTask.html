@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>edycja zadania</title>
+    <!--/*/ <th:block th:include="fragments/general.html :: headerData" /> /*/-->
+</head>
+<body>
+    <header><!--/*/ <th:block th:include="index.html :: header" /> /*/--></header>
+    <nav><!--/*/ <th:block th:include="index.html :: nav" /> /*/--></nav>
+    <section>
+        <aside></aside>
+        <article>
+            <div id="c1" class="container">
+                <fieldset>
+                    <!--                    th:action="@{'/tasks/editTask/'+${current.id}+'/'+${phaseId}"-->
+                    <form th:if="${infoAdd == null AND infoRemove == null}" action="#"
+                          th:action="@{/tasks/editTask/{id}/{phaseId}(id=${current.id}, phaseId=${phaseId})}"
+                          method="post" th:object="${current}">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Osoby wyznaczone</th>
+                                <th>Opis zadania</th>
+                                <th>Termin</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <ul th:each="teamMember : *{employees}">
+                                            <li th:text="${teamMember}">...</li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary" name="addEmployee">+</button>
+                                        <button type="submit" class="btn btn-primary" name="removeEmployee">-</button>
+                                    </div>
+                                </td>
+                                <td rowspan="1">
+                                <textarea class="textareaInTable" id="description" name="description"
+                                          th:field="*{description}"></textarea>
+                                    <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+                                </td>
+                                <td>
+                                    <input type="date" id="start" name="trip-start"
+                                           th:field="*{deadline}">
+                                </td>
+                                <td>
+                                    <select th:field="*{taskStatus}" name="status" th:selected="*{taskStatus}">
+                                        <option th:each="status :
+                                    ${T(io.github.danielzyla.pdcaApp.model.TaskStatus).values()}"
+                                                th:value="${status}" th:text="${status}"
+                                                th:selected="${status}==*{taskStatus}"></option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <a th:href="@{'/cycles/editDoPhase/'+${phaseId}}">Powrót >> Faza cyklu: 'DO'</a>
+                    </form>
+
+                    <form th:if="${infoAdd != null}" action="#"
+                          th:action="@{/tasks/editTask/{id}/{phaseId}(id=${current.id}, phaseId=${phaseId})}"
+                          method="post" th:object="${current}">
+                        <div class="form-group">
+                            <select th:field="${taskForm.employees}" class="form-control">
+                                <th:block th:each="employee : ${allEmployees}">
+                                    <option th:text="|${employee.name} ${employee.surname}|"
+                                            th:value="${employee.id}">
+                                </th:block>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                        <a href="/employees" class="btn btn-primary">nowy</a>
+                        <a th:href="@{'/tasks/editTask/' + *{id} + '/' + ${phaseId}}">anuluj</a>
+                    </form>
+
+                    <form th:if="${infoRemove != null}" action="#" method="post"
+                          th:action="@{/tasks/editTask/{id}/{phaseId}(id=${current.id}, phaseId=${phaseId})}"
+                          th:object="${current}">
+                        <div class="form-group">
+                            <select th:field="${taskForm.employees}" class="form-control">
+                                <th:block th:each="employee : *{employees}">
+                                    <option th:text="|${employee.name} ${employee.surname}|"
+                                            th:value="${employee.id}">
+                                </th:block>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                        <a th:href="@{'/tasks/editTask/' + *{id} + '/' + ${phaseId}}">anuluj</a>
+                    </form>
+
+                </fieldset>
+            </div>
+        </article>
+    </section>
+    <footer><!--/*/ <th:block th:include="fragments/general.html :: footer" /> /*/--></footer>
+</body>
+</html>

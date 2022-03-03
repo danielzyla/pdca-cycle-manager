@@ -1,0 +1,223 @@
+html {
+    height: 100%;
+}
+
+body {
+    background-color: rgba(125, 173, 216);
+    font-family: Calibri, Helvetica, sans-serif;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+}
+
+header {
+  background-color: #666;
+  padding: 30px;
+  text-align: center;
+  font-size: 35px;
+  color: white;
+}
+
+.nav {
+    display: flex;
+}
+
+.item-divider-left {
+    flex: 10 1 auto;
+}
+
+.item-divider-right {
+    flex: 4 1 auto;
+}
+
+.nav-item {
+    flex: 1 1 auto;
+}
+
+.nav-link, .nav-link:hover {
+    color: white;
+    text-align: center;
+}
+
+.nav-item:hover, .dropdown-item, .dropdown-menu{
+    background-color: #666;
+    color: white;
+}
+
+.logout-form{
+    width: 100%;
+}
+
+.logout {
+    background-color: rgba(125, 173, 216);
+    border: 0;
+    width: 100%;
+}
+
+section {
+    flex-grow: 1;
+    display: flex;
+}
+
+aside {
+    padding: 30px;
+}
+
+.nav-list {
+    background-color: rgba(239, 245, 250);
+    list-style-type: none;
+    padding: 10px;
+}
+
+article {
+    background-color: rgba(239, 245, 250);
+    padding: 10px;
+    flex-grow: 1;
+}
+
+@media only screen and (max-width: 600px) {
+    section {
+        flex-grow: 1;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .item-divider-left {
+        flex-grow: 0;
+    }
+
+    .item-divider-right {
+        flex-grow: 0;
+    }
+}
+
+.article-text {
+    padding: 30px 30px 0 30px;
+}
+
+.article-list {
+    padding-left: 70px;
+}
+
+footer {
+  background-color: #777;
+  padding: 10px;
+  text-align: center;
+  color: white;
+}
+
+.height {
+    line-height: 2.5;
+}
+
+.field-name {
+    margin-top: 10px;
+}
+
+.add-departments-products {
+    display: flex;
+}
+
+.add-departments .add-products {
+    float: left;
+}
+
+.border {
+    border: 1px solid grey;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.error {
+    color: red
+}
+
+.form-group {
+    font-weight: bold;
+}
+
+.pagination {
+    display: inline-block;
+}
+
+a {
+    text-decoration: none;
+}
+
+table {
+    border: 1px solid black;
+}
+
+td {
+    padding: 10px;
+}
+
+h3 {
+    margin: 0;
+    padding: 5px;
+}
+
+
+.phase {
+    padding: 20px;
+}
+
+.phase-plan-bg-color {
+    background-color: rgba(255, 153, 153);
+}
+
+.phase-do-bg-color {
+    background-color: rgba(125, 173, 216);
+}
+
+.phase-check-bg-color {
+    background-color: rgba(255, 255, 153);
+}
+
+.phase-act-bg-color {
+    background-color: rgba(153, 230, 153);
+}
+
+.phase-plan-border-color {
+    border: 3px solid rgba(255, 153, 153);
+}
+
+.phase-do-border-color {
+    border: 3px solid rgba(125, 173, 216);
+}
+
+.phase-check-border-color {
+    border: 3px solid rgba(255, 255, 153);
+}
+
+.phase-act-border-color {
+    border: 3px solid rgba(153, 230, 153);
+}
+
+.textareaInTable {
+    width: 100%;
+}
+
+.inTableList, .checkbox-list{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.checkbox-list {
+    max-height: 200px;
+    margin-bottom: 10px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+button {
+    margin: 10px;
+}
+
+.no-wrap-element {
+    display: flex;
+    flex-wrap: no-wrap;
+    align-items: center;
+}

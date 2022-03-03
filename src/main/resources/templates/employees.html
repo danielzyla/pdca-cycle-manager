@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>PRACOWNICY</title>
+    <!--/*/ <th:block th:include="fragments/general.html :: headerData" /> /*/-->
+</head>
+<body>
+<header><!--/*/ <th:block th:include="index.html :: header" /> /*/--></header>
+<nav><!--/*/ <th:block th:include="index.html :: nav" /> /*/--></nav>
+<section>
+    <aside>
+        <fieldset class="border">
+            <form th:if="${info == null}" action="#" th:action="@{/employees}" method="post">
+                <button type="submit" class="btn btn-primary" name="addEmployee">Dodaj pracownika</button>
+            </form>
+            <div th:if="${info != null}">
+                <form action="#" th:action="@{/employees}" method="post" th:object="${employee}">
+                    <div class="form-group">
+                        <label class="field-name" for="name">Imię:</label>
+                        <input type="text" id="name" class="form-control" placeholder="wpisz imię"
+                               name="name" th:field="*{name}">
+                        <p class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label class="field-name" for="surname">Nazwisko:</label>
+                        <input type="text" id="surname" class="form-control" placeholder="wpisz nazwisko"
+                               name="surname" th:field="*{surname}">
+                        <p class="error" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label class="field-name" for="email">Adres email:</label>
+                        <input type="text" id="email" class="form-control" placeholder="wpisz adres email"
+                               name="email" th:field="*{email}">
+                        <p class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label class="field-name">Dział:</label>
+                        <select th:field="*{department}" class="form-control">
+                            <th:block th:each="dept : ${allDepartments}">
+                                <option th:text="${dept.deptName}"
+                                        th:value="${dept.id}">
+                            </th:block>
+                        </select>
+                        <p class="form-group">
+                            <a href="/departments">+</a>
+                        </p>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                    <button type="reset" value="Reset">Reset</button>
+                </form>
+            </div>
+        </fieldset>
+    </aside>
+    <article>
+        <div id="c1" class="container">
+            <h2>Lista pracowników:</h2>
+            <form action="#" th:action="@{/employees}" method="get">
+                <div class="form-group">
+                    <input type="text" class="form-control" th:name="employeeNameOrSurnamePhrase"
+                           placeholder="podaj litery imienia lub nazwiska ...">
+                    <button type="submit" class="btn btn-primary" name="search">szukaj</button>
+                </div>
+            </form>
+            <div th:if="${not #lists.isEmpty(foundEmployees)}">
+                <table class="table table-hover table-light">
+                    <thead>
+                    <tr>
+                        <th>Imię</th>
+                        <th>Nazwisko</th>
+                        <th>Adres email</th>
+                        <th>Projekty</th>
+                        <th>Dział</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="e : ${foundEmployees}">
+                        <td th:text="${e.name}"></td>
+                        <td th:text="${e.surname}"></td>
+                        <td th:text="${e.email}"></td>
+                        <td>
+                            <ul class="inTableList" th:each="plan : ${e.planPhases}">
+                                <li th:text="${plan.name}">...</li>
+                            </ul>
+                        </td>
+                        <td th:text="${e.department}"></td>
+                        <td>
+                            <a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/employees/editEmployee/'+${e.id}}">
+                                <!--/*/ <th:block th:include="fragments/general.html :: edit-icon" /> /*/-->
+                            </a>
+                        </td>
+                        <td>
+                            <a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/employees/'+${e.id}}">
+                                <!--/*/ <th:block th:include="fragments/general.html :: delete-icon" /> /*/-->
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="pagination" th:if="${pageNumbers > 0}">
+                    <span>
+                        <a href="#">&laquo;</a>
+                    </span>
+                    <span th:each="pageNumber : ${#numbers.sequence(0, pageNumbers - 1)}">
+                        <a th:text="${pageNumber + 1}"
+                           th:href="@{/employees(employeeNameOrSurnamePhrase=${givenPhrase},
+                           currentPage=${pageNumber})}">...</a>&nbsp;
+                    </span>
+                    <span>
+                        <a href="#">&raquo;</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </article>
+</section>
+<footer><!--/*/ <th:block th:include="fragments/general.html :: footer" /> /*/--></footer>
+</body>
+</html>

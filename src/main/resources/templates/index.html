@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>HOME</title>
+    <!--/*/ <th:block th:include="fragments/general.html :: headerData" /> /*/-->
+</head>
+<body>
+    <header th:fragment="header">
+        <h2>PDCA CYCLE MANAGER</h2>
+    </header>
+    <nav th:fragment="nav">
+        <ul class="nav">
+            <li class="item-divider-left"></li>
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/">Strona główna</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                   href="#" role="button" aria-expanded="false">Projekty</a>
+                <ul class="nav-item dropdown-menu">
+                    <li><a class="nav-link dropdown-item" href="/projects">Zarządzaj...</a></li>
+                    <li><hr class="nav-link dropdown-divider"></li>
+                    <li><a class="nav-link dropdown-item" href="#">Zadania</a></li>
+                    <li sec:authorize="hasAuthority('ADMIN')"><hr class="nav-link dropdown-divider"></li>
+                    <li sec:authorize="hasAuthority('ADMIN')">
+                        <a class="nav-link dropdown-item" href="/manage">Zaawansowane</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/products">Produkty</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/departments">Działy</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/employees">Pracownicy</a>
+            </li>
+            <li class="item-divider-right"></li>
+            <li sec:authorize="isAuthenticated() == false" class="nav-item last-item">
+                <a class="nav-link" href="/signUp">Zarejestruj się</a>
+            </li>
+            <li sec:authorize="isAuthenticated() == false" class="nav-item last-item">
+                <a class="nav-link" href="/login">Zaloguj się</a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <form class="logout-form" action="/logout" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <input class="nav-link nav-item logout" type="submit" value="Wyloguj się">
+                </form>
+            </li>
+        </ul>
+    </nav>
+    <section>
+        <aside></aside>
+        <article>
+            <div>
+                <p class="article-text">
+                    <b>Plan(Zaplanuj)-Do(Wykonaj)-Check(Sprawdź)-Act(Zastosuj)</b> to tzw. <a href="https://pl.wikipedia.org/wiki/Cykl_Deminga">cykl PDCA</a> opracowany przez <a href="https://pl.wikipedia.org/wiki/William_Edwards_Deming">Edwarda Deminga</a> jako metoda czterech kroków stosowana do ciągłego usprawniania procesów.
+                    Metoda ta ma uniwersalne zastosowanie niezależnie od branży i specyfiki doskonalonego procesu. Jest często jednym z kluczowych elementów w metodologii ‘lean manufacturing’ stosowanej w optymalizacji procesów produkcji.
+                </p>
+                <p class="article-text">
+                    Pojedynczy cykl PDCA zakłada realizację nastepujących kroków:
+                    <ol class="article-list">
+                        <li class="height">Zaplanuj: <em>Punktem wyjścia jest precyzyjne zdefiniowanie problemu do rozwiązania. Określa się zasoby, cele i proponowane rozwiązania.</em></li>
+                        <li class="height">Wykonaj: <em>Obejmuje przygotowanie rozwiązań i ich realizację poprzez przeprowadzenie prób, pilotażu czy zbudowanie prototypu.</em></li>
+                        <li class="height">Sprawdź: <em>Rezultaty prób są poddawane ocenie w odniesieniu do założonych celów.</em></li>
+                        <li class="height">Zastosuj: <em>Obejmuje działania związane z wdrożeniem wypracowanych zmian. Jeśli istnieją obszary do dalszej poprawy uruchamia się kolejny nowy cykl.</em></li>
+                    </ol>
+                </p>
+                <p class="article-text">
+                    Niniejsza aplikacja wspomaga użytkownika w stosowaniu cykli PDCA poprzez:
+                    <ul class="article-list">
+                        <li class="height">chronologiczny zapis z działań</li>
+                        <li class="height">sterowanie kolejnością kroków w cyklu</li>
+                        <li class="height">sterowanie kolejnością cykli</li>
+                        <li class="height">łatwy dostęp do treści zakończonych cykli</li>
+                        <li class="height">możliwość prowadzenia wielu projektów jednocześnie</li>
+                        <li class="height">możliwość definiowania podstawowych zasobów</li>
+                        <li class="height">korzystanie z tych samych zasobów w wielu projektach</li>
+                    </ul>
+                </p>
+            </div>
+        </article>
+    </section>
+    <footer><!--/*/ <th:block th:include="fragments/general.html :: footer" /> /*/--></footer>
+</body>
+</html>

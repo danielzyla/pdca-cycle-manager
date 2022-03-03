@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>edycja Projektu</title>
+    <!--/*/ <th:block th:include="fragments/general.html :: headerData" /> /*/-->
+</head>
+<body>
+    <header><!--/*/ <th:block th:include="index.html :: header" /> /*/--></header>
+    <nav><!--/*/ <th:block th:include="index.html :: nav" /> /*/--></nav>
+    <section>
+        <aside></aside>
+        <article>
+            <div id="c1" class="container">
+                <fieldset class="border">
+                    <form action="#" th:action="@{'/projects/update/' + ${current.id}}" method="post" th:object="${current}">
+                        <table class="table table-bordered table-light">
+                            <tr>
+                                <th></th>
+                                <th>Nazwa projektu:</th>
+                                <th>Kod projektu:</th>
+                                <th>Dział:</th>
+                                <th>Produkt:</th>
+                            </tr>
+                            <tr>
+                                <td>obecna wartość:</td>
+                                <td><p th:text="${current.projectName}"></td>
+                                <td><p th:text="${current.projectCode}"></p></td>
+                                <td>
+                                    <div th:each="d : ${current.departments}">
+                                        <span th:text="${d.deptName}"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div th:each="p : ${current.products}">
+                                        <span th:text="${p.productName}"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>zmień:</td>
+                                <td>
+                                    <div class="form-group">
+                                        <input type="text" id="projectName" class="form-control"
+                                                     placeholder="wpisz nazwę projektu"
+                                                     name="projectName" th:field="*{projectName}">
+                                        <p class="error" th:if="${#fields.hasErrors('projectName')}"
+                                           th:errors="*{projectName}"></p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <input type="text" id="projectCode" class="form-control"
+                                                     placeholder="wpisz kod projektu"
+                                                     name="projectCode" th:field="*{projectCode}">
+                                        <p class="error" th:if="${#fields.hasErrors('projectCode')}"
+                                            th:errors="*{projectCode}"></p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="add-departments border">
+                                        <!--/*/ <th:block th:include="projects.html :: departments" /> /*/-->
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="add-products border">
+                                        <!--/*/ <th:block th:include="projects.html :: products" /> /*/-->
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                        <button type="reset" value="Reset">Reset</button>
+                    </form>
+                    <a th:href="@{/projects}">Powrót>></a>
+                </fieldset>
+            </div>
+        </article>
+    </section>
+    <footer><!--/*/ <th:block th:include="fragments/general.html :: footer" /> /*/--></footer>
+</body>
+</html>

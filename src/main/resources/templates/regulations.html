@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>HOME</title>
+    <!--/*/ <th:block th:include="fragments/general.html :: headerData" /> /*/-->
+</head>
+<body>
+<header th:fragment="header">
+    <h2>PDCA CYCLE MANAGER</h2>
+</header>
+<nav></nav>
+<section>
+    <aside></aside>
+    <article>
+        <h1 style="text-align:center">Regulamin korzystania z aplikacji</h1>
+        <p>Aplikacja 'pdca-cycle-manager' jest obecnie w fazie testów.</p>
+
+        <ul>
+            <li><p>Administrator zastrzega, że działanie applikacji ma charakter czasowy i testowy.</p></li>
+            <li><p>Administrator zastrzega, że zakres i sposób działania aplikacji może ulec zmianie.</p></li>
+            <li><p>Administrator nie gwarantuje prawidłowego działania aplikacji.</p></li>
+            <li><p>Administrator nie gwarantuje udostepnięnienia aplikacji do użytkowania po zakończeniu fazy testów.</p></li>
+            <li><p>Administrator nie zapewnia możliwości zmiany hasła. W przypadku utraty loginu lub hasła przez użytkownika, odzyskanie danych użytkownika nie będzie możliwe.</p></li>
+            <li><p>Rejestracja użytkownika została udostępniona wyłącznie w celach testowych.</p></li>
+            <li><p>Dane użytkowników zgromadzone w bazie danych aplikacji średnio raz w miesiącu są trwale usuwane.</p></li>
+            <li><p>Poprzez 'Dane użytkownika' rozumie się login użytkownika, hasło użytkownika oraz dane wprowadzone do aplikacji w związku z użytkowaniem/testowaniem aplikacji.</p></li>
+            <li><p>Hasło użytkownika przechowywane jest w bazie danych aplikacji w formie zaszyfrowanej.</p></li>
+            <li><p>Zabronione jest umieszczanie w serwisie danych zawierających wyrażenia wulgarne, nieprzyzwoite lub obraźliwe.</p></li>
+            <li><p>Zabronione jest umieszczanie w serwisie danych mających charakter ofert handlowych, reklam itp. treści.</p></li>
+            <li><p>Zabronione jest umieszczanie w serwisie danych naruszających prawa innych podmiotów lub osób trzecich.</p></li>
+            <li><p>Dane zamieszczone przez użytkownika w serwisie w modułach 'Pracownicy', 'Produkty' i 'Działy' będą dostępne dla innych zarejestrowanych użytkowników, co Użytkownik przyjmuje do wiadomości i akceptuje.</p></li>
+            <li><p>Administrator nie ponosi odpowiedzialności za rodzaj i treść danych udostępnionych przez użytkownika w serwisie w modułach 'Pracownicy', 'Produkty' i 'Działy'.</p></li>
+            <li><p>Dostęp do danych zamieszczonych przez użytkownika w serwisie w module 'Projekty' będą mieli użytkownik i administrator.</p></li>
+            <li><p>W przypadku stwierdzenia przez Administratora podejrzenia naruszenia przez użytkownika zasad niniejszego regulaminu, wszystkie dane użytkownika zostaną niezwłocznie usunięte.</p></li>
+        </ul>
+
+    </article>
+</section>
+<footer><!--/*/ <th:block th:include="fragments/general.html :: footer" /> /*/--></footer>
+</body>
+</html>

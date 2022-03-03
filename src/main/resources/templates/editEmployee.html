@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>edycja Pracownika</title>
+    <!--/*/ <th:block th:include="fragments/general.html :: headerData" /> /*/-->
+</head>
+<body>
+    <header><!--/*/ <th:block th:include="index.html :: header" /> /*/--></header>
+    <nav><!--/*/ <th:block th:include="index.html :: nav" /> /*/--></nav>
+    <section>
+        <aside></aside>
+        <article>
+            <div id="c1" class="container">
+
+                <fieldset class="border">
+                    <form action="#" method="post" th:action="@{/employees/editEmployee/{id}(id=${current.id})}"
+                          th:object="${current}">
+                        <div class="form-group">
+                            <label for="name">Imię:</label>
+                            <input type="text" id="name" class="form-control"
+                                   name="name" th:field="*{name}">
+                        </div>
+                        <div class="form-group">
+                            <label for="surname">Nazwisko:</label>
+                            <input type="text" id="surname" class="form-control"
+                                   name="surname" th:field="*{surname}">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Adres email:</label>
+                            <input type="text" id="email" class="form-control"
+                                   name="email" th:field="*{email}">
+                        </div>
+                        <div class="form-group">
+                            <label>Dział:</label>
+                            <select id="department" name="department" class="form-control">
+                                <option th:each="dept : ${allDepartments}"
+                                        th:text="${dept.deptName}"
+                                        th:value="${dept.id}"
+                                        th:selected="${dept.id == current.department.id}"></option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                        <button type="reset" value="Reset">Reset</button>
+                    </form>
+                </fieldset>
+
+                <a href="/employees">Powrót>></a>
+            </div>
+        </article>
+    </section>
+    <footer><!--/*/ <th:block th:include="fragments/general.html :: footer" /> /*/--></footer>
+</body>
+</html>

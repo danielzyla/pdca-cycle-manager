@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>edycja działu</title>
+    <!--/*/ <th:block th:include="fragments/general.html :: headerData" /> /*/-->
+</head>
+<body>
+    <header><!--/*/ <th:block th:include="index.html :: header" /> /*/--></header>
+    <nav><!--/*/ <th:block th:include="index.html :: nav" /> /*/--></nav>
+    <section>
+        <aside></aside>
+        <article>
+            <div id="c1" class="container">
+
+                <fieldset class="border">
+                    <form action="#" th:action="@{/departments/editDepartment/{id}(id=${current.id})}" method="post"
+                          th:object="${current}">
+                        <div class="form-group">
+                            <label for="deptName">Nazwa działu:</label>
+                            <input type="text" id="deptName" class="form-control"
+                                   name="deptName" th:field="*{deptName}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                        <button type="reset" value="Reset">Reset</button>
+                    </form>
+                </fieldset>
+
+                <a href="/departments">Powrót>></a>
+            </div>
+        </article>
+    </section>
+    <footer><!--/*/ <th:block th:include="fragments/general.html :: footer" /> /*/--></footer>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>PROJEKTY</title>
+    <!--/*/ <th:block th:include="fragments/general.html :: headerData" /> /*/-->
+</head>
+<body>
+    <header><!--/*/ <th:block th:include="index.html :: header" /> /*/--></header>
+    <nav><!--/*/ <th:block th:include="index.html :: nav" /> /*/--></nav>
+    <section>
+        <aside>
+            <fieldset class="border">
+                <form th:if="${info == null}" action="#" th:action="@{/projects}" method="post">
+                    <button type="submit" class="btn btn-primary" name="addProject">Dodaj projekt</button>
+                </form>
+                <form th:if="${info != null}" action="#"
+                      th:action="@{/projects}" method="post" th:object="${project}">
+                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                    <button type="reset" value="Reset">Reset</button>
+                    <p class="error" th:text="${message_project}">...</p>
+                    <div class="form-group">
+                        <label class="field-name" for="projectName">Nazwa projektu:</label>
+                        <input type="text" id="projectName" class="form-control" placeholder="wpisz nazwę projektu"
+                               name="projectName" th:field="*{projectName}">
+                        <p class="error" th:if="${#fields.hasErrors('projectName')}" th:errors="*{projectName}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label class="field-name" for="projectCode">Kod projektu:</label>
+                        <input type="text" id="projectCode" class="form-control" placeholder="wpisz kod projektu"
+                               name="projectCode" th:field="*{projectCode}">
+                        <p class="error" th:if="${#fields.hasErrors('projectCode')}" th:errors="*{projectCode}"></p>
+                    </div>
+                    <div class="add-departments-products">
+                        <div class="add-departments border">
+                            <b class="field-name">Dział:</b>
+                            <div th:fragment="departments">
+                                <ul class="checkbox-list">
+                                    <li th:each="dept : ${#lists.sort(allDepartments, departmentsDtoByNameAsc)}">
+                                        <div class="no-wrap-element">
+                                            <input type="checkbox" th:field="*{departments}" th:value="${dept.id}"/>
+                                            <label th:for="${#ids.prev('departments')}"
+                                                   th:text="${dept.deptName}">Dział</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <p class="form-group">
+                                    <a href="/departments">+</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="add-products border">
+                            <b class="field-name">Produkt:</b>
+                            <div th:fragment="products">
+                                <ul class="checkbox-list">
+                                    <li th:each="product : ${#lists.sort(allProducts, productsDtoByNameAsc)}">
+                                        <div class="no-wrap-element">
+                                            <input type="checkbox" th:field="*{products}" th:value="${product.id}"/>
+                                            <label th:for="${#ids.prev('products')}"
+                                               th:text="${product.productName}">Produkt</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <p class="form-group">
+                                    <a href="/products">+</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </fieldset>
+        </aside>
+        <article>
+            <div id="c1" class="container">
+                <h2>Lista Projektów</h2>
+                <div th:unless="${#lists.isEmpty(allProjects)}">
+                    <table class="table table-hover table-light">
+                        <thead>
+                            <tr>
+                                <th>Data utworzenia</th>
+                                <th>Nazwa</th>
+                                <th>Kod projektu</th>
+                                <th>Dział(y)</th>
+                                <th>Produkt(y)</th>
+                                <th>Cykl(e)</th>
+                                <th>Zakończony</th>
+                                <th>Data zakończenia</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="p : ${allProjects}">
+                                <td th:text="${#temporals.format(p.startTime, 'dd/MMM/yyyy HH:mm')}"></td>
+                                <td th:text="${p.projectName}"></td>
+                                <td th:text="${p.projectCode}"></td>
+                                <td>
+                                    <ul class="inTableList"
+                                        th:each="d : ${#lists.sort(p.departments, departmentsByNameAsc)}">
+                                        <li th:text="${d}">...</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="inTableList" th:each="prod : ${#lists.sort(p.products, productsByNameAsc)}">
+                                        <li th:text="${prod}">...</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="inTableList" th:each="c : ${#lists.sort(p.cycles, cyclesByNameAsc)}">
+                                        <li><a th:href="@{'/cycles/showCycle/'+${c.id}}"
+                                               th:text="|${c} started: ${#temporals.format(c.startTime, 'dd/MMM/yyyy HH:mm')}|"></a></li>
+                                    </ul>
+                                </td>
+                                <td><input type="checkbox" th:checked="${p.complete}" disabled/></td>
+                                <td th:text="${#temporals.format(p.endTime, 'dd/MMM/yyyy HH:mm')}"></td>
+                                <td>
+                                    <a th:if="${p.complete != true}" th:href="@{'/projects/update/'+${p.id}}">
+                                        <!--/*/ <th:block th:include="fragments/general.html :: edit-icon" /> /*/-->
+                                    </a>
+                                </td>
+                                <td>
+                                    <a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/projects/'+${p.id}}">
+                                        <!--/*/ <th:block th:include="fragments/general.html :: delete-icon" /> /*/-->
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </article>
+    </section>
+    <footer><!--/*/ <th:block th:include="fragments/general.html :: footer" /> /*/--></footer>
+</body>
+</html>

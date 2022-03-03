@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>faza DO</title>
+    <!--/*/ <th:block th:include="fragments/general.html :: headerData" /> /*/-->
+</head>
+<body>
+    <header><!--/*/ <th:block th:include="index.html :: header" /> /*/--></header>
+    <nav><!--/*/ <th:block th:include="index.html :: nav" /> /*/--></nav>
+    <section>
+        <aside></aside>
+        <article>
+            <div id="c1" class="container">
+
+                <form action="#" th:action="@{/cycles/editDoPhase/{id}(id=${current.id})}" method="post"
+                      th:object="${current}">
+                    <div class="form-group">
+                        <label for="description">OPIS PRZYGOTOWANIA I WDROŻENIA ROZWIĄZANIA:</label><br>
+                        <textarea id="description" rows="4" cols="120" name="description"
+                                  th:field="*{description}"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="complete">ETAP KOMPLETNY:</label>
+                        <input id="complete" type="checkbox" th:field="*{complete}"/>
+                    </div>
+                    <button th:if="*{complete != true}" type="submit" class="btn btn-primary">Zapisz</button>
+                    <button th:if="*{complete != true}" type="reset" value="reset">Reset</button><br><br>
+                    Dodaj zadanie: <input th:if="*{complete != true}" type="submit" class="btn btn-primary" value="+" name="addTask">
+                </form>
+
+                <fieldset th:unless="${#lists.isEmpty(current.doPhaseTasks)}"> ZADANIA:
+                    <table class="table table-hover table-light">
+                        <thead>
+                            <tr>
+                                <th>Data utworzenia</th>
+                                <th>Opis zadania</th>
+                                <th>Osoby wyznaczone</th>
+                                <th>Termin</th>
+                                <th>Status</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="task : ${#lists.sort(current.doPhaseTasks, tasksByStartTime)}">
+                                <td th:text="${#temporals.format(task.startTime, 'dd/MMM/yyyy HH:mm:ss')}"></td>
+                                <td th:text="${task.description}"></td>
+                                <td>
+                                    <ul class="inTableList" th:each="e : ${task.employees}">
+                                        <li th:text="${e}">...</li>
+                                    </ul>
+                                </td>
+                                <td th:text="${#temporals.format(task.deadline, 'dd-MM-yyyy')}"></td>
+                                <td th:text="${task.taskStatus}"></td>
+                                <td>
+                                    <a th:if="${current.complete != true}" th:href="@{'/tasks/editTask/' + ${task.id} + '/' + ${current.id}}">
+                                        <!--/*/ <th:block th:include="fragments/general.html :: edit-icon" /> /*/-->
+                                    </a>
+                                </td>
+                                <td>
+                                    <a th:if="${current.complete != true}" th:href="@{'/tasks/removeTask/' + ${task.id} + '/' + ${current.id}}">
+                                        <!--/*/ <th:block th:include="fragments/general.html :: delete-icon" /> /*/-->
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+
+                <a th:href="@{'/cycles/showCycle/' + ${current.id}}">Powrót>></a>
+            </div>
+        </article>
+    </section>
+    <footer><!--/*/ <th:block th:include="fragments/general.html :: footer" /> /*/--></footer>
+</body>
+</html>
